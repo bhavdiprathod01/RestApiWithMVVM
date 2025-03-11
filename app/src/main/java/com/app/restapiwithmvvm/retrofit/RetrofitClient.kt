@@ -1,4 +1,4 @@
-package com.app.restapiwithmvvm
+package com.app.restapiwithmvvm.retrofit
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

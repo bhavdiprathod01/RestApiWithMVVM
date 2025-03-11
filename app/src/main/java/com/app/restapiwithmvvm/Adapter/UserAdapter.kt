@@ -1,9 +1,10 @@
-package com.app.restapiwithmvvm
+package com.app.restapiwithmvvm.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.app.restapiwithmvvm.model.User
 
 class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
     private var userList: List<User?>? = null
@@ -22,7 +23,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = userList?.get(position)
         holder.text1.text = user?.name ?: "No Name"
-        holder.text2.text = user?.email ?: "No Email"
+        holder.text2.text = user?.email +" \n"+user?.phone ?: "No Email"
     }
 
     override fun getItemCount(): Int {

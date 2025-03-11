@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.app.restapiwithmvvm.Adapter.UserAdapter
+import com.app.restapiwithmvvm.model.User
+import com.app.restapiwithmvvm.retrofit.UserViewModel
 
 
 class MainActivity : AppCompatActivity() {

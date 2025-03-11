@@ -1,4 +1,4 @@
-package com.app.restapiwithmvvm
+package com.app.restapiwithmvvm.model
 
 class User {
     val id: Int = 0

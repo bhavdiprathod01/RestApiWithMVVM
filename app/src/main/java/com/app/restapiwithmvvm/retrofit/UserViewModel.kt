@@ -1,7 +1,8 @@
-package com.app.restapiwithmvvm
+package com.app.restapiwithmvvm.retrofit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.app.restapiwithmvvm.model.User
 
 
 class UserViewModel : ViewModel() {
