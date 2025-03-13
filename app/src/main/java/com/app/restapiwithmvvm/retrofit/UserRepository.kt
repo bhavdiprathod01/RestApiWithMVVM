@@ -1,32 +1,36 @@
 package com.app.restapiwithmvvm.retrofit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.content.Context
+import com.app.restapiwithmvvm.model.AppDatabase
 import com.app.restapiwithmvvm.model.User
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
-class UserRepository {
-    private val apiService = RetrofitClient.getInstance().create(ApiService::class.java) // Fix method call
+class UserRepository(private val context: Context) {
 
-    fun getUsers(): LiveData<List<User?>?> {
-        val usersLiveData = MutableLiveData<List<User?>?>()
+    private val apiService = RetrofitClient.getInstance().create(ApiService::class.java)
+    private val db = AppDatabase.getDatabase(context)
 
-        apiService.getUsers().enqueue(object : Callback<List<User?>> {
-            override fun onResponse(call: Call<List<User?>>, response: Response<List<User?>>) {
-                if (response.isSuccessful) {
-                    usersLiveData.value = response.body()
-                } else {
-                    usersLiveData.value = null
-                }
+    fun getUsers(): Flow<List<User>> = flow {
+        //val usersLiveData = MutableLiveData<List<User>>()
+        val dbUser = db.userDao().getAllUsers()
+        if (dbUser.size > 0) {
+            emit(dbUser)
+        } else {
+            val response = try {
+                apiService.getUsers().execute() // Synchronous call
+            } catch (e: Exception) {
+                null
             }
-
-            override fun onFailure(call: Call<List<User?>>, t: Throwable) {
-                usersLiveData.value = null
+            if (response != null && response.isSuccessful) {
+                val users = response.body() ?: emptyList()
+                db.userDao().insertAll(users) // Save to DB
+                emit(users)
+            } else {
+                emit(emptyList()) // API failure
             }
-        })
-
-        return usersLiveData
-    }
+        }
+    }.flowOn(Dispatchers.IO)
 }
